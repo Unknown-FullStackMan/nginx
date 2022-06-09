@@ -291,7 +291,7 @@ server块和虚拟主机的概念有密切联系。
 
 
 
-# Nginx架构
+# Nginx架构初探
 
 nginx 在启动后，在 unix 系统中会以 daemon 的方式在后台运行，后台进程包含一个 master 进程和多个
 
@@ -322,6 +322,8 @@ nginx 也是支持多线程的方式的，只是我们主流的方式还是多�
 型是分不开的。nginx 的进程模型，可以由下图来表示
 
 ![image-20220531162513967](C:\Users\A\Desktop\Nginx\Nginx.assets\image-20220531162513967.png)
+
+
 
 在 nginx 启动后，如果我们要操作 nginx，要怎么做呢？从上文中我们可以看到，master 来管理 worker 进程，所以我们只需要与 master 进程通信就行了。master 进程会接收来自外界发来的信号，再根据信号做不同的事情。所以我们要控制 nginx，只需要通过 kill 向 master 进程发送信号就行了。比如 kill -HUP pid，则是告诉 nginx，从容地重启 nginx，我们一般用这个信号来重启 nginx，或重新加载配置，因为是从容地重启，
 
@@ -485,5 +487,55 @@ cpu 亲缘性的绑定选项，我们可以将某一个进程绑定在某一个�
 
 # Nginx的事件驱动模型
 
+事件接收器、事件发送器、事件处理器。
 
 
+
+## 事件驱动模型库
+
+select、poll、epoll、rtsig模型
+
+其他事件驱动模型
+
+kqueue模型、/dev/poll模型、eventport模型
+
+
+
+# Nginx服务器架构
+
+
+
+主进程：Nginx配置文件解析、数据结构初始化、模块配置、注册、信号处理、网络监听生成、工作进程生成和管理等工作。
+
+工作进程：进程初始化、模块调用和请求处理等工作，是Nginx服务器提供服务的主体。
+
+
+
+主进程、工作进程、后端服务器和缓存等。
+
+
+
+![](C:\Users\A\Desktop\Nginx\Nginx.assets\image-20220601084839665.png)
+
+
+
+
+
+## Nginx服务器的进程
+
+### 主进程
+
+### 工作进程
+
+### 缓存索引重建及管理进程
+
+
+
+# Rewirte功能
+
+upstream name {...}
+
++ server指令 设置权重 weight = ?
+
++ ip_hash指令
++ keepalive connections;
